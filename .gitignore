@@ -20,3 +20,15 @@ node_modules
 *.before-*.bak
 node_modules/
 .next/
+
+
+# Local databases and private credentials
+.secrets/
+.backups/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+migrate-to-supabase.cjs
+migrate-to-supabase.cjs.bak
+prisma/schema.sqlite.backup.prisma
