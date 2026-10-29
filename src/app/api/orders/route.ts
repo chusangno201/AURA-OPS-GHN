@@ -1,0 +1,68 @@
+import { checkSku } from "@/lib/sku";
+import { NextRequest, NextResponse } from "next/server";
+import { authenticated } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { z } from "zod";
+import { submitOrderToGhn } from "@/lib/submit-ghn";
+const schema = z.object({
+  customerName: z.string().trim().min(1),
+  phone: z.string().trim().min(9),
+  address: z.string().trim().min(5),
+  ward: z.string().trim().min(1),
+  province: z.string().trim().min(1),
+  itemName: z.string().trim().min(1),
+  quantity: z.coerce.number().int().min(1),
+  unitPrice: z.coerce.number().int().min(0),
+  cod: z.coerce.number().int().min(0).max(50000000),
+  weight: z.coerce.number().int().min(1).max(50000),
+  length: z.coerce.number().int().min(1),
+  width: z.coerce.number().int().min(1),
+  height: z.coerce.number().int().min(1),
+  shippingPayer: z.coerce.number().int().min(1).max(2),
+  note: z.string().default(""),
+  pageId: z.string().optional(),
+  senderId: z.string().optional(),
+});
+export async function POST(req: NextRequest) {
+  if (!(await authenticated()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const form = Object.fromEntries((await req.formData()).entries());
+  const parsed = schema.safeParse(form);
+  if (!parsed.success)
+    return NextResponse.json(
+      { error: z.prettifyError(parsed.error) },
+      { status: 400 },
+    );
+  const sku = parsed.data.itemName.trim().toUpperCase();
+
+  let validSku = false;
+  try {
+    validSku = await checkSku(sku);
+  } catch (error) {
+    console.error("[SKU] Google Sheets error:", error);
+    return NextResponse.json(
+      { error: "Không kết nối được bảng SKU Google Sheets" },
+      { status: 503 }
+    );
+  }
+
+  if (!validSku) {
+    return NextResponse.json(
+      { error: `Mã SKU ${sku} không tồn tại trong Google Sheets` },
+      { status: 400 }
+    );
+  }
+
+  const order = await db.order.create({
+    data: {
+      ...parsed.data,
+      itemName: sku,
+      cod: parsed.data.unitPrice * parsed.data.quantity,
+    },
+  });
+  if (form.action === "confirm") {
+    const result=await submitOrderToGhn(order.id);
+    return NextResponse.redirect(new URL(result.status==="SENT" ? "/?sent="+order.id : "/?error=ghn",req.url),303);
+  }
+  return NextResponse.redirect(new URL("/?created=" + order.id, req.url), 303);
+}

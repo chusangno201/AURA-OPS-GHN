@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+model Message {
+  id String @id @default(cuid())
+  mid String @unique
+  pageId String
+  senderId String
+  isEcho Boolean @default(false)
+  text String
+  createdAt DateTime @default(now())
+  @@index([pageId, senderId])
+}
+model Order {
+  id String @id @default(cuid())
+  pageId String?
+  senderId String?
+  customerName String
+  phone String
+  address String
+  ward String
+  province String
+  itemName String
+  quantity Int @default(1)
+  unitPrice Int
+  cod Int
+  weight Int @default(500)
+  length Int @default(25)
+  width Int @default(20)
+  height Int @default(10)
+  shippingPayer Int @default(1)
+  note String @default("")
+  status String @default("DRAFT")
+  ghnOrderCode String? @unique
+  ghnFee Int?
+  ghnStatus String?
+  codTransferredAt DateTime?
+  sheetSyncedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model GhnEvent {
+  id String @id @default(cuid())
+  eventKey String @unique
+  orderCode String
+  receivedAt DateTime @default(now())
+}

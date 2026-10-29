@@ -1,0 +1,56 @@
+export function parseCheckout(text: string) {
+  const normalize = (s: string) =>
+    s.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/đ/g, "d")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const fields = new Map<string, string>();
+
+  const labels = /(?:Họ\s*tên|Tên\s*khách|SĐT|Số\s*điện\s*thoại|Địa\s*chỉ|Phường\s*\/\s*Xã|Tỉnh\s*\/\s*TP|Tỉnh\s*\/\s*Thành|Sản\s*phẩm|Số\s*lượng|Đơn\s*giá|Giá|Phí\s*ship|Ghi\s*chú\s*khách|Ghi\s*chú)\s*[:：]/giu;
+
+  const matches = [...text.matchAll(labels)];
+
+  for (let i = 0; i < matches.length; i++) {
+    const current = matches[i];
+    const start = current.index! + current[0].length;
+    const end = i + 1 < matches.length
+      ? matches[i + 1].index!
+      : text.length;
+
+    const key = normalize(current[0].replace(/[:：]\s*$/, ""));
+    const value = text.slice(start, end).trim();
+    fields.set(key, value);
+  }
+
+  const get = (...keys: string[]) =>
+    keys.map(k => fields.get(normalize(k))).find(Boolean) || "";
+
+  const customerName = get("Họ tên", "Tên khách");
+  const phone = get("SĐT", "Số điện thoại").replace(/\D/g, "");
+  const address = get("Địa chỉ");
+  const ward = get("Phường/Xã");
+  const province = get("Tỉnh/TP", "Tỉnh/Thành");
+  const itemName = get("Sản phẩm");
+  const quantity = Number(get("Số lượng"));
+  const unitPrice = Number(get("Đơn giá", "Giá").replace(/[^\d]/g, ""));
+  const note = get("Ghi chú khách", "Ghi chú");
+  const shipping = normalize(get("Phí ship"));
+  const shippingPayer =
+    /shop|nguoi gui|ben gui/.test(shipping) ? "1"
+    : /khach|nguoi nhan|ben nhan/.test(shipping) ? "2"
+    : "";
+
+  if (!customerName || !/^0\d{9}$/.test(phone) ||
+      !address || !province || !itemName ||
+      !Number.isInteger(quantity) || quantity < 1 ||
+      !Number.isSafeInteger(unitPrice) || unitPrice < 1 ||
+      !shippingPayer) return null;
+
+  return {
+    customerName, phone, address, ward, province,
+    itemName, quantity, unitPrice, shippingPayer, note
+  };
+}

@@ -1,0 +1,257 @@
+
+@media (max-width: 768px) {
+  .messages-section,
+  .messages-section .scroll,
+  .messages-section table,
+  .messages-section tbody,
+  .messages-section tr,
+  .messages-section td {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .messages-section {
+    overflow: hidden !important;
+  }
+
+  .messages-section .scroll {
+    overflow-x: hidden !important;
+  }
+
+  .messages-section table,
+  .messages-section tbody,
+  .messages-section tr,
+  .messages-section td {
+    display: block !important;
+  }
+
+  .messages-section thead,
+  .messages-section td:nth-child(2),
+  .messages-section td:nth-child(3) {
+    display: none !important;
+  }
+
+  .messages-section tr {
+    padding: 12px 0 !important;
+  }
+
+  .messages-section .msg-text-col,
+  .messages-section .msg-details,
+  .messages-section .msg-details summary,
+  .messages-section .msg-full-text {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .messages-section .msg-details summary {
+    font-size: 13px !important;
+    padding: 12px !important;
+    white-space: normal !important;
+  }
+
+  .messages-section td:last-child a {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .aura-order-search {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e7d9cc;
+    border-radius: 12px;
+    padding: 13px 14px;
+    font-size: 14px;
+    background: #fff;
+    margin-bottom: 8px;
+  }
+
+  .aura-order-count {
+    font-size: 12px;
+    color: #8a807a;
+    padding: 4px 2px 8px;
+  }
+
+  .aura-show-more-orders {
+    display: block;
+    width: 100%;
+    background: #f2e4d6;
+    color: #80532f;
+    border: 1px solid #e5cbb3;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .aura-mobile-order,
+  .aura-mobile-order summary,
+  .aura-order-extra {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .aura-mobile-order summary {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .aura-mobile-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+  }
+
+  .aura-mobile-actions form {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .aura-mobile-actions button {
+    width: 100%;
+    min-height: 44px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .aura-mobile-ghn {
+    background: #242124;
+    color: white;
+  }
+
+  .aura-mobile-sheet {
+    background: #f1e8e0;
+    color: #805534;
+  }
+
+  .aura-ghn-review,
+  .aura-ghn-done {
+    grid-column: 1 / -1;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .aura-ghn-review {
+    background: #fff3df;
+    color: #925c18;
+  }
+
+  .aura-ghn-done {
+    background: #e0f3e9;
+    color: #176a43;
+  }
+}
+
+@media (max-width: 768px) {
+  .aura-compact-actions {
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+    margin-top: 6px;
+  }
+
+  .aura-order-extra .aura-compact-actions form {
+    display: inline-block;
+    width: auto !important;
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .aura-compact-actions button {
+    display: inline-flex;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 36px !important;
+    padding: 8px 12px !important;
+    border-radius: 9px !important;
+    font-size: 12px !important;
+    line-height: 1.2;
+    white-space: nowrap;
+    font-weight: 650;
+  }
+
+  .aura-small-ghn {
+    background: #242124 !important;
+    color: #fff !important;
+  }
+
+  .aura-small-ghn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .aura-small-sheet {
+    background: #f2e6dc !important;
+    color: #805534 !important;
+  }
+
+  .aura-ghn-warning {
+    flex-basis: 100%;
+    color: #925c18;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .aura-order-extra > .aura-compact-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .aura-order-extra > .aura-compact-actions > form {
+    display: block !important;
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  .aura-order-extra > .aura-compact-actions > form > button {
+    display: inline-flex !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 34px !important;
+    padding: 7px 10px !important;
+    margin: 0 !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    border-radius: 8px !important;
+  }
+
+  .aura-order-extra > .aura-compact-actions > .aura-ghn-warning {
+    display: none !important;
+  }
+}

@@ -1,0 +1,59 @@
+import type { Order } from "@prisma/client";
+export async function createShipment(o: Order) {
+  const base = process.env.GHN_BASE_URL || "https://dev-online-gateway.ghn.vn";
+  if (!process.env.GHN_TOKEN || !process.env.GHN_SHOP_ID)
+    throw Error("Thiếu GHN_TOKEN / GHN_SHOP_ID");
+  const body = {
+    client_order_code: `AURA-${o.id}`,
+    to_name: o.customerName,
+    to_phone: o.phone,
+    to_address: o.address,
+    to_ward_name: o.ward,
+    to_province_name: o.province,
+    is_new_to_address: true,
+    content: o.itemName,
+    weight: o.weight,
+    length: o.length,
+    width: o.width,
+    height: o.height,
+    service_type_id: o.weight >= 20000 ? 5 : 2,
+    payment_type_id: o.shippingPayer,
+    required_note: "CHOXEMHANGKHONGTHU",
+    cod_amount: o.cod,
+    insurance_value: Math.min(o.unitPrice * o.quantity, 5000000),
+    note: o.note,
+    items: [
+      {
+        name: o.itemName,
+        quantity: o.quantity,
+        price: o.unitPrice,
+        weight: Math.max(1, Math.round(o.weight / o.quantity)),
+        ...(o.weight >= 20000
+          ? { length: o.length, width: o.width, height: o.height }
+          : {}),
+      },
+    ],
+  };
+  const response = await fetch(
+    base + "/shiip/public-api/v2/shipping-order/create",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Token: process.env.GHN_TOKEN,
+        ShopId: process.env.GHN_SHOP_ID,
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    },
+  );
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.code !== 200 || !data.data?.order_code)
+    throw Error(
+      data.message_display || data.message || `GHN HTTP ${response.status}`,
+    );
+  return {
+    code: String(data.data.order_code),
+    fee: Number(data.data.total_fee || 0),
+  };
+}
