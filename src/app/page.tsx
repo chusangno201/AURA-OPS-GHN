@@ -1,3 +1,4 @@
+import DeleteMessageButton from "@/components/DeleteMessageButton";
 import MobileOrders from "@/components/MobileOrders";
 import { parseCheckout } from "@/lib/checkout-text";
 import { redirect } from "next/navigation";
@@ -345,6 +346,7 @@ export default async function Home({
                     >
                       {createdMessageIds.has(m.id) ? "✓ Đã tạo đơn" : "+ Tạo đơn"}
                     </a>
+                    <DeleteMessageButton id={m.id} />
                   </td>
                 </tr>
               ))}
